@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabula</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    :root {
+      --guest-btn-bg:      #fb5607;
+      --guest-btn-border:  #9e2a2b;
+      --google-btn-bg:     #4285F4;
+      --google-btn-border: #2a5298;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Press Start 2P', cursive;
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                  url('assets/img/bg.webp') no-repeat center center / cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    /* ── Title ── */
+    /* Desktop keeps the original 100px.
+       Scales with viewport on tablet/phone, never below 38px. */
+    .title {
+      font-size: clamp(38px, 15vw, 100px);
+      text-transform: uppercase;
+      background: linear-gradient(to bottom, #164d94, #164d94);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1.5px #ffffff;
+      filter: drop-shadow(8px 8px 0px #000);
+      animation: float 3s ease-in-out infinite;
+      text-align: center;
+      margin-bottom: clamp(6px, 3vw, 60px);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0);   }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ── Subtitle ── */
+    /* Removed the hardcoded margin-top: -30px which caused the text
+       to overlap the title when the title shrinks on mobile.
+       Letter-spacing scales down so the text never clips on narrow screens. */
+    .sub-title {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: clamp(9px, 2.8vw, 22px);
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: clamp(1px, 0.4vw, 3px);
+      background: #ffffff;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(3px 3px 0px #000);
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 0.1s;
+      margin-bottom: clamp(22px, 5vw, 50px);
+      max-width: 90vw;
+    }
+
+    /* ── Button row ── */
+    /* Side-by-side on desktop (original).
+       flex-wrap lets them fall to two rows if the viewport is too narrow
+       before the hard stack kicks in at 480px. */
+    .button-row {
+      display: flex;
+      flex-direction: row;
+      gap: clamp(12px, 4vw, 40px);
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      z-index: 10;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* ── Button ── */
+    /* Width/height/font scale with viewport.
+       Original desktop size: 280px × 65px, 18px font. */
+    .pixel-button {
+      position: relative;
+      width: clamp(160px, 40vw, 280px);
+      height: clamp(52px, 9vh, 65px);
+      border: none;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: clamp(12px, 3.5vw, 18px);
+      color: white;
+      cursor: pointer;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      transition: transform 0.1s, border-bottom-width 0.1s;
+      z-index: 10;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .guest-color {
+      background: var(--guest-btn-bg);
+      border-bottom: 6px solid var(--guest-btn-border);
+    }
+
+    .google-color {
+      background: var(--google-btn-bg);
+      border-bottom: 6px solid var(--google-btn-border);
+    }
+
+    .pixel-button:active {
+      transform: translateY(4px);
+      border-bottom-width: 2px;
+    }
+
+    /* ── Google wrapper ── */
+    /* Must match .pixel-button dimensions so the invisible
+       Google iframe sits perfectly on top of our styled button. */
+    .google-wrapper {
+      position: relative;
+      width: clamp(160px, 40vw, 280px);
+      height: clamp(52px, 9vh, 65px);
+    }
+
+    .google-wrapper .pixel-button {
+      width: 100%;
+      height: 100%;
+    }
+
+    #googleBtnContainer {
+      position: absolute;
+      inset: 0;
+      opacity: 0.01;
+      z-index: 20;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    #errorMsg {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      color: #ff4444;
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(7px, 1.8vw, 10px);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── Phones: stack buttons vertically ── */
+    @media (max-width: 480px) {
+      .button-row {
+        flex-direction: column;
+        gap: 14px;
+      }
+      .pixel-button,
+      .google-wrapper {
+        width: min(280px, 80vw);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">TABULA</h1>
+  <h2 class="sub-title">Explore &nbsp;DYCI&nbsp; Campus &nbsp;in&nbsp; a &nbsp;Whole&nbsp; New &nbsp;Way!</h2>
+
+  <div class="button-row">
+    <button class="pixel-button guest-color" onclick="playAsGuest()">
+      Play as Guest
+    </button>
+
+    <div class="google-wrapper">
+      <div class="pixel-button google-color">
+        Google Login
+      </div>
+      <div id="googleBtnContainer"></div>
+      <p id="errorMsg"></p>
+    </div>
+  </div>
+
+<script>
+  const CLIENT_ID = "509785679401-9hlh0mcaft7miamq7j4pvl90pqqksun3.apps.googleusercontent.com";
+
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: CLIENT_ID,
+      callback: handleCredentialResponse
+    });
+
+    // Read the actual rendered width of the wrapper so the Google iframe
+    // matches our button exactly on every screen size.
+    const wrapperWidth = document.querySelector('.google-wrapper').offsetWidth || 280;
+    google.accounts.id.renderButton(
+      document.getElementById("googleBtnContainer"),
+      { theme: "filled_blue", size: "large", width: wrapperWidth, shape: "rectangular" }
+    );
+  };
+
+  function handleCredentialResponse(response) {
+    fetch("php/auth_google.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ credential: response.credential })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "new_user") {
+        localStorage.setItem("userEmail", data.email);
+        localStorage.setItem("userRole",  data.role || "user");
+        window.location.href = "setup.php";
+
+      } else if (data.status === "login") {
+        localStorage.setItem("userName", data.name);
+        localStorage.setItem("userRole", data.role);
+        localStorage.setItem("userEmail", data.email);
+        localStorage.setItem("userAvatar", data.avatar);
+
+        if (data.role === "admin" || data.role === "superadmin") {
+          window.location.href = "admin/admin_dashboard.php";
+        } else {
+          window.location.href = "menu.php";
+        }
+
+      } else {
+        document.getElementById("errorMsg").textContent = data.message || "Login failed.";
+      }
+    })
+    .catch(() => {
+      document.getElementById("errorMsg").textContent = "Network error. Try again.";
+    });
+  }
+
+  function playAsGuest() {
+    localStorage.clear();
+    localStorage.setItem("userType", "guest");
+    localStorage.setItem("userRole", "guest");
+    localStorage.setItem("userName", "Guest");
+    window.location.href = "guest_menu.php";
+  }
+</script>
+</body>
+</html>
