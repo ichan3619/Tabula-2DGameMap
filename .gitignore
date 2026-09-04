@@ -1,0 +1,22 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Dependency directories (if you ever add Composer/npm)
+vendor/
+node_modules/
+
+# PHP session/cache junk (if any accumulates locally)
+*.cache
