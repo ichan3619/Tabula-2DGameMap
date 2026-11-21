@@ -74,3 +74,7 @@ assets/             shared images and the sign-in script
 ## Credits
 
 Made as a student project for Dr. Yanga's Colleges, Inc. Campus building names and likenesses belong to DYCI.
+
+## License
+
+Copyright © 2026. All rights reserved. The source is published for viewing only; see [LICENSE](LICENSE).

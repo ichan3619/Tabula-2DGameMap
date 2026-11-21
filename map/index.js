@@ -171,12 +171,10 @@ function isPlayerInZone(player, building) {
 
 // ================== LOAD BUILDINGS ==================
 async function loadBuildings() {
-    console.log('loadBuildings STARTED')   // TEMP DEBUG
     const res = await fetch('../php/api_buildings.php')
     if (!res.ok) { console.error('Failed to load buildings:', res.status); return }
     const data = await res.json()
     if (data.error) { console.error('API error:', data.error); return }
-     console.log('loadBuildings got data:', data.length, 'buildings')   // TEMP DEBUG
 
     data.forEach(b => {
         const img = new Image()
@@ -199,7 +197,6 @@ async function loadBuildings() {
         
         sprite.width        = b.width;
     	sprite.height       = b.height;
-        console.log('SET', b.name, sprite.width, sprite.height)
         img.onload = null
 
         buildings.push(sprite)
