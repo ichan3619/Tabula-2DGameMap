@@ -9,6 +9,10 @@ progress.
 
 ![Tabula's start screen: "Explore DYCI campus in a whole new way!" with Play as Guest and Google Login](docs/screenshot-landing.png)
 
+| Exploring the campus | Talking to an NPC |
+|---|---|
+| ![A guest player walking between pixel-art campus buildings, near the Student Marine NPC](docs/screenshot-explore.png) | ![A player talking to the Student Marine NPC: "Hey! Looking for the registrar?"](docs/screenshot-npc.png) |
+
 ## Features
 
 - **Walk the campus**: a top-down pixel-art map with collision boundaries, keyboard controls on desktop and touch
